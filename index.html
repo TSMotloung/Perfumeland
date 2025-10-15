@@ -2349,8 +2349,6 @@ var wc_cart_fragments_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax
 <script type="text/javascript" src="https://perfumeland.co.za/wp-content/plugins/woocommerce/assets/js/frontend/cart-fragments.min.js?ver=9.8.5" id="wc-cart-fragments-js" defer="defer" data-wp-strategy="defer"></script>
 <script></script> 
 
-
-	<!-- Widget Configuration -->
 <script>
   window.ChatWidgetConfig = {
     webhook: {
@@ -2358,17 +2356,17 @@ var wc_cart_fragments_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax
       route: 'general',
     },
     branding: {
-      logo: 'https://perfumeland.co.za/wp-content/uploads/2024/05/logo.png',
-      name: 'PerfumeLand',
+      logo: 'https://www.amavaperfumes.com/path-to-your-logo.png',
+      name: 'Amava Perfumes',
       welcomeText: 'Get instant answers to your questions!',
       responseTimeText: 'CLICK the button below to start Chatting',
     },
     style: {
-      primaryColor: '#bfa17a', // Champagne Gold
-      secondaryColor: '#2c2a29', // Deep Charcoal Black
-      position: 'right',
-      backgroundColor: '#ffffff', // White background
-      fontColor: '#1a1a1a', // Soft Black Text
+      primaryColor: '#b9887d',
+      secondaryColor: '#8c6e65',
+      position: 'left',
+      backgroundColor: '#ffffff',
+      fontColor: '#2c2a29',
     },
     suggestedQuestions: [
       'What are your best-selling perfumes?',
@@ -2378,103 +2376,87 @@ var wc_cart_fragments_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax
     ]
   };
 </script>
-
 <script src="https://cdn.jsdelivr.net/gh/funtastic418/chat-widget@main/chat-widget.js"></script>
 
 <style>
-  /* Hide "powered by" text cleanly */
-  .chat-widget small:contains("powered"),
-  .chat-widget small:contains("n8n"),
-  .chat-widget .attribution,
-  .chat-widget .powered-by,
-  .chat-widget a[href*="n8n"] {
-    color: white !important;
-    background-color: white !important;
-    font-size: 0.1px !important;
-    pointer-events: none !important;
-    user-select: none !important;
+  /* Hide all possible branding elements */
+  .chat-widget [class*="branding"],
+  .chat-widget [class*="powered"],
+  .chat-widget [class*="attribution"],
+  .chat-widget footer,
+  .chat-widget small,
+  .chat-widget a[href*="n8n"],
+  .chat-widget *[class*="footer"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
   }
 </style>
 
 <script>
-  function hideBrandingOnly() {
-    const allElements = document.querySelectorAll('*');
-    allElements.forEach(el => {
-      if (el.children.length === 0 && el.textContent) {
-        const text = el.textContent.trim();
-        if (
-          text.toLowerCase() === 'la smarts automation' ||
-          text.toLowerCase() === 'la smarts automation' ||
-          (text.toLowerCase().includes('la smarts automation') && text.length < 30)
-        ) {
-          el.style.color = 'white';
-          el.style.backgroundColor = 'white';
-          el.style.fontSize = '0.1px';
-          el.style.pointerEvents = 'none';
-          el.style.userSelect = 'none';
-        }
+  function removeBranding() {
+    // Remove elements containing "powered by" or "n8n"
+    document.querySelectorAll('.chat-widget *').forEach(el => {
+      const text = el.textContent?.toLowerCase() || '';
+      if (text.includes('powered by') || text.includes('n8n')) {
+        el.remove();
+      }
+    });
+    
+    // Also hide by making invisible
+    document.querySelectorAll('.chat-widget small, .chat-widget footer, .chat-widget a').forEach(el => {
+      const text = el.textContent?.toLowerCase() || '';
+      if (text.includes('powered') || text.includes('n8n')) {
+        el.style.cssText = 'display:none!important;visibility:hidden!important;opacity:0!important;height:0!important;';
       }
     });
   }
-
-  function fixLinksToSameTab() {
-    const chatWidget = document.querySelector('.chat-widget') || document.body;
-    const links = chatWidget.querySelectorAll('a');
-    
-    links.forEach(link => {
-      if (link.getAttribute('target') === '_blank') {
-        link.removeAttribute('target');
-      }
+  
+  function fixLinks() {
+    document.querySelectorAll('.chat-widget a').forEach(link => {
+      link.removeAttribute('target');
       link.addEventListener('click', function(e) {
-        if (this.href && (this.href.startsWith('http://') || this.href.startsWith('https://'))) {
+        if (this.href?.startsWith('http')) {
           e.preventDefault();
+          e.stopPropagation();
           window.location.href = this.href;
         }
       }, true);
     });
   }
-
+  
+  // Initial removal after widget loads
   setTimeout(() => {
-    hideBrandingOnly();
-    fixLinksToSameTab();
-
-    let checkCount = 0;
-    const brandingCheck = setInterval(() => {
-      hideBrandingOnly();
-      fixLinksToSameTab();
-      checkCount++;
-      if (checkCount > 15) clearInterval(brandingCheck);
-    }, 2000);
-  }, 5000);
-
-  const observer = new MutationObserver(mutations => {
-    let shouldCheckLinks = false;
-    mutations.forEach(mutation => {
-      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-        mutation.addedNodes.forEach(node => {
-          if (node.nodeType === 1) {
-            if (node.tagName === 'A' || node.querySelectorAll('a').length > 0) {
-              shouldCheckLinks = true;
-            }
-          }
-        });
-      }
-    });
-
-    if (shouldCheckLinks) setTimeout(fixLinksToSameTab, 100);
+    removeBranding();
+    fixLinks();
+  }, 3000);
+  
+  // Keep checking for branding
+  setInterval(() => {
+    removeBranding();
+    fixLinks();
+  }, 1000);
+  
+  // Watch for DOM changes
+  const observer = new MutationObserver(() => {
+    removeBranding();
+    fixLinks();
   });
-
+  
   setTimeout(() => {
-    const targetNode = document.querySelector('.chat-widget') || document.body;
-    observer.observe(targetNode, { childList: true, subtree: true });
-  }, 6000);
+    const target = document.querySelector('.chat-widget') || document.body;
+    observer.observe(target, { childList: true, subtree: true });
+  }, 3000);
 </script>
-
-	
+		
 </body>
 </html>
 
 <!-- This website is like a Rocket, isn't it? Performance optimized by WP Rocket. Learn more: https://wp-rocket.me - Debug: cached@1760487826 -->
+
 
 
 
