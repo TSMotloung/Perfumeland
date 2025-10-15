@@ -167,6 +167,7 @@ var woocommerce_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":
   gtag('js', new Date());
 
   gtag('config', 'AW-10860483465');
+
 </script><meta name="theme-color" content="rgb(20,22,65)">					<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 										<noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript>
 	<meta name="generator" content="Powered by WPBakery Page Builder - drag and drop page builder for WordPress."/>
@@ -2346,7 +2347,109 @@ var wc_cart_fragments_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax
 /* ]]> */
 </script>
 <script type="text/javascript" src="https://perfumeland.co.za/wp-content/plugins/woocommerce/assets/js/frontend/cart-fragments.min.js?ver=9.8.5" id="wc-cart-fragments-js" defer="defer" data-wp-strategy="defer"></script>
-<script></script></body>
+<script></script> 
+
+<!-- Widget Configuration -->
+<script>
+  window.ChatWidgetConfig = {
+    webhook: {
+      url: 'https://n8n.lasmarts.win/webhook/9c33f18a-5341-46de-a656-4f6a62e83391/chat',
+      route: 'general',
+    },
+    branding: {
+      logo: 'https://perfumeland.co.za/wp-content/uploads/2024/05/logo.png',  // replace with actual logo
+      name: 'Perfume Land',
+      welcomeText: 'Get instant answers to your questions!',
+      responseTimeText: 'CLICK the button below to start Chatting',
+    },
+    style: {
+      primaryColor: '#bfa17a',
+      secondaryColor: '#8c6e4b',
+      position: 'right',
+      backgroundColor: '#ffffff',
+      fontColor: '#2c2a29',
+    },
+    suggestedQuestions: [
+      'What are your best-selling perfumes?',
+      'How do I choose the right fragrance?',
+      'What are your shipping options?',
+      'Do you offer samples?'
+    ]
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/gh/funtastic418/chat-widget@main/chat-widget.js"></script>
+<style>
+  .chat-widget small:contains("powered"),
+  .chat-widget small:contains("n8n"),
+  .chat-widget .attribution,
+  .chat-widget .powered-by,
+  .chat-widget a[href*="n8n"] {
+    color: white !important;
+    background-color: white !important;
+    font-size: 0.1px !important;
+    pointer-events: none !important;
+    user-select: none !important;
+  }
+</style>
+<script>
+  function hideBrandingOnly() {
+    document.querySelectorAll('*').forEach(el => {
+      if (el.children.length === 0 && el.textContent) {
+        const text = el.textContent.trim().toLowerCase();
+        if (
+          text === 'powered by n8n' ||
+          text === 'powered by' ||
+          (text.includes('powered by') && text.length < 30)
+        ) {
+          el.style.color = 'white';
+          el.style.backgroundColor = 'white';
+          el.style.fontSize = '0.1px';
+          el.style.pointerEvents = 'none';
+          el.style.userSelect = 'none';
+        }
+      }
+    });
+  }
+
+  function fixLinksToSameTab() {
+    const chatWidget = document.querySelector('.chat-widget') || document.body;
+    chatWidget.querySelectorAll('a').forEach(link => {
+      if (link.getAttribute('target') === '_blank') link.removeAttribute('target');
+      link.addEventListener('click', function (e) {
+        if (this.href && (this.href.startsWith('http://') || this.href.startsWith('https://'))) {
+          e.preventDefault();
+          window.location.href = this.href;
+        }
+      }, true);
+    });
+  }
+
+  setTimeout(() => {
+    hideBrandingOnly();
+    fixLinksToSameTab();
+    let checkCount = 0;
+    const brandingCheck = setInterval(() => {
+      hideBrandingOnly();
+      fixLinksToSameTab();
+      if (++checkCount > 15) clearInterval(brandingCheck);
+    }, 2000);
+  }, 5000);
+
+  const observer = new MutationObserver(mutations => {
+    let shouldCheck = mutations.some(m =>
+      m.type === 'childList' && m.addedNodes.length > 0
+    );
+    if (shouldCheck) setTimeout(fixLinksToSameTab, 100);
+  });
+
+  setTimeout(() => {
+    const target = document.querySelector('.chat-widget') || document.body;
+    observer.observe(target, { childList: true, subtree: true });
+  }, 6000);
+</script>
+
+
+</body>
 </html>
 
 <!-- This website is like a Rocket, isn't it? Performance optimized by WP Rocket. Learn more: https://wp-rocket.me - Debug: cached@1760487826 -->
