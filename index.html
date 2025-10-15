@@ -2349,7 +2349,6 @@ var wc_cart_fragments_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax
 <script type="text/javascript" src="https://perfumeland.co.za/wp-content/plugins/woocommerce/assets/js/frontend/cart-fragments.min.js?ver=9.8.5" id="wc-cart-fragments-js" defer="defer" data-wp-strategy="defer"></script>
 <script></script> 
 
-<!-- Widget Configuration -->
 <script>
   window.ChatWidgetConfig = {
     webhook: {
@@ -2357,17 +2356,17 @@ var wc_cart_fragments_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax
       route: 'general',
     },
     branding: {
-      logo: 'https://perfumeland.co.za/wp-content/uploads/2024/05/logo.png',
-      name: 'PerfumeLand',
+      logo: 'https://www.amavaperfumes.com/path-to-your-logo.png',  // replace with real logo URL from Amava
+      name: 'Amava Perfumes',
       welcomeText: 'Get instant answers to your questions!',
       responseTimeText: 'CLICK the button below to start Chatting',
     },
     style: {
-      primaryColor: '#bfa17a', // Champagne Gold
-      secondaryColor: '#2c2a29', // Deep Charcoal Black
-      position: 'right',
-      backgroundColor: '#ffffff', // White background
-      fontColor: '#1a1a1a', // Soft Black Text
+      primaryColor: '#b9887d',
+      secondaryColor: '#8c6e65',
+      position: 'left',
+      backgroundColor: '#ffffff',
+      fontColor: '#2c2a29',
     },
     suggestedQuestions: [
       'What are your best-selling perfumes?',
@@ -2381,7 +2380,6 @@ var wc_cart_fragments_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax
 <script src="https://cdn.jsdelivr.net/gh/funtastic418/chat-widget@main/chat-widget.js"></script>
 
 <style>
-  /* Hide "powered by" text cleanly */
   .chat-widget small:contains("powered"),
   .chat-widget small:contains("n8n"),
   .chat-widget .attribution,
@@ -2397,14 +2395,13 @@ var wc_cart_fragments_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax
 
 <script>
   function hideBrandingOnly() {
-    const allElements = document.querySelectorAll('*');
-    allElements.forEach(el => {
+    document.querySelectorAll('*').forEach(el => {
       if (el.children.length === 0 && el.textContent) {
-        const text = el.textContent.trim();
+        const text = el.textContent.trim().toLowerCase();
         if (
-          text.toLowerCase() === 'powered by n8n' ||
-          text.toLowerCase() === 'powered by' ||
-          (text.toLowerCase().includes('powered by') && text.length < 30)
+          text === 'powered by n8n' ||
+          text === 'powered by' ||
+          (text.includes('powered by') && text.length < 30)
         ) {
           el.style.color = 'white';
           el.style.backgroundColor = 'white';
@@ -2418,13 +2415,9 @@ var wc_cart_fragments_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax
 
   function fixLinksToSameTab() {
     const chatWidget = document.querySelector('.chat-widget') || document.body;
-    const links = chatWidget.querySelectorAll('a');
-    
-    links.forEach(link => {
-      if (link.getAttribute('target') === '_blank') {
-        link.removeAttribute('target');
-      }
-      link.addEventListener('click', function(e) {
+    chatWidget.querySelectorAll('a').forEach(link => {
+      if (link.getAttribute('target') === '_blank') link.removeAttribute('target');
+      link.addEventListener('click', function (e) {
         if (this.href && (this.href.startsWith('http://') || this.href.startsWith('https://'))) {
           e.preventDefault();
           window.location.href = this.href;
@@ -2436,42 +2429,30 @@ var wc_cart_fragments_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax
   setTimeout(() => {
     hideBrandingOnly();
     fixLinksToSameTab();
-
     let checkCount = 0;
     const brandingCheck = setInterval(() => {
       hideBrandingOnly();
       fixLinksToSameTab();
-      checkCount++;
-      if (checkCount > 15) clearInterval(brandingCheck);
+      if (++checkCount > 15) clearInterval(brandingCheck);
     }, 2000);
   }, 5000);
 
   const observer = new MutationObserver(mutations => {
-    let shouldCheckLinks = false;
-    mutations.forEach(mutation => {
-      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-        mutation.addedNodes.forEach(node => {
-          if (node.nodeType === 1) {
-            if (node.tagName === 'A' || node.querySelectorAll('a').length > 0) {
-              shouldCheckLinks = true;
-            }
-          }
-        });
-      }
-    });
-
-    if (shouldCheckLinks) setTimeout(fixLinksToSameTab, 100);
+    let shouldCheck = mutations.some(m =>
+      m.type === 'childList' && m.addedNodes.length > 0
+    );
+    if (shouldCheck) setTimeout(fixLinksToSameTab, 100);
   });
 
   setTimeout(() => {
-    const targetNode = document.querySelector('.chat-widget') || document.body;
-    observer.observe(targetNode, { childList: true, subtree: true });
+    const target = document.querySelector('.chat-widget') || document.body;
+    observer.observe(target, { childList: true, subtree: true });
   }, 6000);
 </script>
-
 
 </body>
 </html>
 
 <!-- This website is like a Rocket, isn't it? Performance optimized by WP Rocket. Learn more: https://wp-rocket.me - Debug: cached@1760487826 -->
+
 
